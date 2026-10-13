@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quem somos nós · TSX Interações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Spline+Sans+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+  /* ---------- Quem somos nós ---------- */
+  .about {
+    background: var(--bg);
+    padding-block: 80px;
+    padding-inline: 64px;
+  }
+  .about__inner {
+    max-width: 1312px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .about__body { display: flex; flex-direction: column; gap: 48px; }
+  .about__title {
+    margin: 0;
+    font-family: var(--font-2);
+    font-weight: 500;
+    font-size: clamp(28px, 3.34vw, 48px);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .about__title .w { color: var(--ink-muted); }
+  .about__title .w:first-child { color: var(--ink); }
+
+  .stats {
+    --h: 411px;        /* full card height */
+    --step: 25.76px;   /* height difference between neighbours before scroll (20px +12%, +15%) */
+    --p: 0;            /* scroll progress 0 → 1 (set by JS) */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    height: var(--h);
+    align-items: end;
+  }
+  .stat {
+    --i: 0;
+    position: relative;
+    height: calc(var(--h) - var(--step) * var(--i) * (1 - var(--p)));
+    background: #005073;
+    border-radius: 4px;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 58.5px), calc(100% - 65px) 100%, 0 100%);
+    padding: 24px 41px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    will-change: height;
+  }
+  .stat::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 8px;
+    background: var(--rule);
+  }
+  .stat:nth-child(2) { --i: 1; }
+  .stat:nth-child(3) { --i: 2; }
+  .stat:nth-child(4) { --i: 3; }
+
+  .stat__value {
+    margin: 0;
+    font-weight: 500;
+    font-size: clamp(28px, 2.78vw, 40px);
+    line-height: 1.4;
+    color: #FFFFFF;
+  }
+  .stat__value span { display: block; }
+  .stat__desc {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(15px, 1.25vw, 18px);
+    line-height: 1.5;
+    color: var(--lead);
+  }
+
+  /* Tablet: 2 × 2, stagger within each row */
+  @media (max-width: 1023px) {
+    .about { padding-inline: 40px; padding-block: 64px; }
+    .stats {
+      --h: 340px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: var(--h);
+      height: auto;
+    }
+    .stat:nth-child(odd) { --i: 0; }
+    .stat:nth-child(even) { --i: 1; }
+  }
+  /* Phone: single column, no stagger */
+  @media (max-width: 599px) {
+    .about { padding-inline: 20px; padding-block: 56px; }
+    .about__body { gap: 32px; }
+    .stats { --h: 240px; grid-template-columns: 1fr; gap: 16px; }
+    .stat { --i: 0 !important; }
+  }
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
+</head>
+<body>
+<div class="demo-bar"><span>Quem somos nós — título revela palavra a palavra e os bignumbers se alinham conforme a section chega ao centro da tela</span><a href="../index.html">← Todas as interações</a></div>
+<div class="demo-spacer" aria-hidden="true">Role para baixo ↓</div>
+<section class="about" aria-labelledby="about-title">
+  <div class="about__inner">
+    <p class="eyebrow">
+      <svg viewBox="0 0 8 9" aria-hidden="true"><path fill="#AC8C58" d="M8 2.235 4 0 0 2.235v4.53L4 9l4-2.235z"/></svg>
+      Quem somos nós
+    </p>
+    <div class="about__body">
+      <h2 class="about__title" id="about-title">Especialistas em CapEx, planejamento e controle, riscos, avaliação de maturidade e gerenciamento da implantação de projetos de grande porte.</h2>
+      <ul class="stats" id="stats">
+        <li class="stat">
+          <p class="stat__value"><span>+100</span><span>Bilhões</span></p>
+          <p class="stat__desc">Em Capex total de projetos trabalhados</p>
+        </li>
+        <li class="stat">
+          <p class="stat__value"><span>+2,5</span><span>Milhões</span></p>
+          <p class="stat__desc">Homens-hora de trabalhos realizados sem acidentes</p>
+        </li>
+        <li class="stat">
+          <p class="stat__value"><span>+200</span><span>Profissionais</span></p>
+          <p class="stat__desc">Compões nosso quadro técnico fixo</p>
+        </li>
+        <li class="stat">
+          <p class="stat__value"><span>+40</span><span>Projetos</span></p>
+          <p class="stat__desc">Realizados em 7 anos em 23 clientes diferentes</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<div class="demo-spacer" aria-hidden="true">Role para cima ↑ para ver a interação ao contrário</div>
+<script>
+(() => {
+  const section = document.querySelector('.about');
+  const row = document.getElementById('stats');
+  const title = document.getElementById('about-title');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- Parameters ---------- */
+  // Gatilho "enter":  % da section que já entrou na tela vindo de baixo (100% = section inteira visível).
+  // Gatilho "exit":   % da section que já passou pelo topo depois de aparecer inteira.
+  // Gatilho "center": 0% quando a fileira de boxes entra por baixo, 100% quando o centro da section
+  //                   chega ao centro da tela (os boxes se alinham à medida que a section é centralizada).
+  const P = {
+    titleTrigger: 'enter',  titleStart: 0, titleEnd: 100,
+    boxTrigger: 'center',   boxStart: 0,   boxEnd: 100,
+    step: 25.76,       // diferença de altura entre boxes vizinhos antes do scroll
+    smoothing: 0.07,   // 0–1: menor = movimento mais macio
+    scrollLerp: 0.08,  // inércia do scroll suave (Lenis)
+  };
+
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const range = (m, start, end) => end <= start ? (m >= start ? 1 : 0) : clamp((m - start) / (end - start), 0, 1);
+
+  /* ---------- Title words ---------- */
+  const words = title.textContent.trim().split(/\s+/);
+  title.setAttribute('aria-label', words.join(' '));
+  title.innerHTML = words.map(w => '<span class="w" aria-hidden="true">' + w + '</span>').join(' ');
+  const spans = [...title.children];
+  const FROM = [0xBB, 0xB8, 0xB3], TO = [0x2F, 0x2D, 0x28];
+  const mix = t => 'rgb(' + FROM.map((c, k) => Math.round(c + (TO[k] - c) * t)).join(',') + ')';
+
+  /* ---------- Scroll tracking ---------- */
+  const target = { enter: 0, exit: 0, center: 0 }, current = { enter: 0, exit: 0, center: 0 };
+  let raf = null;
+
+  function measure() {
+    const r = section.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // A section taller than the screen counts as fully shown once it fills the screen.
+    target.enter = clamp((vh - r.top) / Math.min(r.height, vh), 0, 1) * 100;
+    const leaveAt = Math.min(0, vh - r.height);
+    target.exit = clamp((leaveAt - r.top) / r.height, 0, 1) * 100;
+    // Section top when the stats row starts to show, and when the section is centred on screen
+    const rowOffset = row.getBoundingClientRect().top - r.top;
+    const from = vh - rowOffset, to = (vh - r.height) / 2;
+    target.center = from > to ? clamp((from - r.top) / (from - to), 0, 1) * 100 : (r.top <= to ? 100 : 0);
+  }
+
+  function apply(m) {
+    const tp = reduce.matches ? 1 : range(m[P.titleTrigger], P.titleStart, P.titleEnd);
+    const t = tp * (spans.length - 1);
+    spans.forEach((s, i) => { s.style.color = i === 0 ? mix(1) : mix(clamp(t - (i - 1), 0, 1)); });
+
+    const bp = reduce.matches ? 1 : range(m[P.boxTrigger], P.boxStart, P.boxEnd);
+    row.style.setProperty('--p', easeInOut(bp).toFixed(4));
+
+  }
+
+  function tick() {
+    let done = true;
+    for (const k in current) {
+      current[k] += (target[k] - current[k]) * P.smoothing;
+      if (Math.abs(target[k] - current[k]) < 0.05) current[k] = target[k];
+      else done = false;
+    }
+    apply(current);
+    raf = done ? null : requestAnimationFrame(tick);
+  }
+
+  function onScroll() {
+    measure();
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
+  /* ---------- Smooth scroll ---------- */
+  let lenis = null;
+  function setupLenis() {
+    lenis?.destroy();
+    lenis = null;
+    if (reduce.matches || typeof Lenis === 'undefined') return;
+    lenis = new Lenis({ lerp: P.scrollLerp, autoRaf: true });
+  }
+
+  /* ---------- Start ---------- */
+  row.style.setProperty('--step', P.step + 'px');
+  setupLenis();
+  measure();
+  Object.assign(current, target);
+  apply(current);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  reduce.addEventListener?.('change', () => { setupLenis(); apply(current); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soluções em diferentes frentes · TSX Interações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Spline+Sans+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+  /* ---------- Segmentos atendidos (Onde atuamos) — Figma 8379:9763 ---------- */
+  .sectors {
+    background: #F2F2F2;
+    padding: 80px 64px;
+  }
+  .sectors__inner {
+    width: 100%;
+    max-width: 1312px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+  .sectors__head {                  /* eyebrow on top; title and lead share a row, bottom-aligned */
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 534px);   /* lead starts where the photo starts */
+    grid-template-areas: "eyebrow eyebrow" "title lead";
+    align-items: end;
+    gap: 8px 32px;
+  }
+  .sectors__head .eyebrow { grid-area: eyebrow; }
+  .sectors__title { grid-area: title; }
+  .sectors__lead { grid-area: lead; }
+  .eyebrow--bar { font-weight: 600; }
+  .eyebrow--bar::before {           /* 2px accent bar instead of the hexagon */
+    content: "";
+    flex: none;
+    width: 2px;
+    height: 14px;
+    background: #BA965C;
+  }
+  .sectors__title {
+    margin: 0;
+    font-family: var(--font-2);
+    font-weight: 500;
+    font-size: clamp(32px, 3.34vw, 48px);
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .sectors__lead {
+    max-width: 515px;
+    margin: 0;
+    font: 400 18px/1.5 var(--font-2);
+    color: var(--ink-2);
+  }
+  .sectors__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: clamp(32px, 5.56vw, 80px);
+  }
+  .sectors__list {
+    flex: 0 1 685px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sectors__list li + li { border-top: 1px solid #C6CED2; }
+  .sectors__list li { display: flex; flex-direction: column; justify-content: center; flex: 1; }
+  .sector {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: inset 0 0 0 #005073;
+    font: inherit;
+    text-align: left;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color .35s ease, padding .35s ease, box-shadow .35s ease;
+  }
+  .sector__num {               /* Numbers/M */
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: clamp(24px, 2.78vw, 40px);
+    line-height: 1.3;
+    color: #005073;
+    font-variant-numeric: tabular-nums;
+  }
+  .sector__name {              /* H3 */
+    font-family: var(--font-2);
+    font-weight: 400;
+    font-size: clamp(24px, 2.78vw, 40px);
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .sector[aria-selected="true"] {
+    background: #E5DCCB;
+    padding: 12px 16px 12px 22px;   /* 6px bar + 16px */
+    box-shadow: inset 6px 0 0 #005073;
+  }
+  .sector:focus-visible { outline: 2px solid #005073; outline-offset: 2px; }
+
+  .sectors__media {
+    position: relative;
+    flex: 0 1 534px;
+    aspect-ratio: 534 / 504;
+    background: #B8C8D4;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 67px), calc(100% - 74px) 100%, 0 100%);   /* Figma corner cut */
+    max-width: 100%;
+    align-self: flex-start;
+  }
+  .sectors__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+  .sectors__media img.is-active { opacity: 1; }
+  .sectors__media::after {          /* warm tint from Figma: #AC8C58 at 30% (linear burn ≈ multiply) */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(172, 140, 88, .3);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  @media (max-width: 1023px) {
+    .sectors { padding: 64px 40px; }
+    .sectors__head { grid-template-columns: 1fr; grid-template-areas: "eyebrow" "title" "lead"; align-items: start; }
+    .sectors__lead { margin-top: 8px; }
+  }
+  @media (max-width: 799px) {
+    .sectors { padding: 56px 20px; }
+    .sectors__inner { gap: 32px; }
+    .sectors__body { flex-direction: column; gap: 32px; }
+    .sectors__list { flex: none; }
+    .sectors__list li { padding-block: 4px; }
+    .sectors__media { flex: none; width: 100%; max-width: 534px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sector, .sectors__media img { transition: none; }
+  }
+
+</style>
+</head>
+<body>
+<div class="demo-bar"><span>Soluções em diferentes frentes — hover/foco/toque num segmento troca o estado do item e a imagem</span><a href="../index.html">← Todas as interações</a></div>
+<section class="sectors" aria-labelledby="sectors-title">
+  <div class="sectors__inner">
+    <div class="sectors__head">
+      <p class="eyebrow eyebrow--bar">Soluções em diferentes frentes</p>
+      <h2 class="sectors__title" id="sectors-title">Segmentos atendidos</h2>
+      <p class="sectors__lead">Atuamos em projetos de diferentes portes e segmentos, unindo técnica, planejamento e gestão para criar soluções sob medida para cada empreendimento.</p>
+    </div>
+    <div class="sectors__body">
+      <ul class="sectors__list" role="tablist" aria-label="Segmentos">
+        <li role="presentation"><button type="button" class="sector" id="sector-1" role="tab" aria-selected="true" data-img="img-mineracao"><span class="sector__num">1.</span><span class="sector__name">Mineração</span></button></li>
+        <li role="presentation"><button type="button" class="sector" id="sector-2" role="tab" aria-selected="false" data-img="img-energia"><span class="sector__num">2.</span><span class="sector__name">Energia</span></button></li>
+        <li role="presentation"><button type="button" class="sector" id="sector-3" role="tab" aria-selected="false" data-img="img-barragens"><span class="sector__num">3.</span><span class="sector__name">Barragens</span></button></li>
+        <li role="presentation"><button type="button" class="sector" id="sector-4" role="tab" aria-selected="false" data-img="img-infraestrutura"><span class="sector__num">4.</span><span class="sector__name">Infraestrutura</span></button></li>
+        <li role="presentation"><button type="button" class="sector" id="sector-5" role="tab" aria-selected="false" data-img="img-edificacoes"><span class="sector__num">5.</span><span class="sector__name">Edificações</span></button></li>
+      </ul>
+      <div class="sectors__media">
+        <img id="img-mineracao" class="is-active" src="../assets/segmento-mineracao.jpg" alt="Vista aérea de uma planta de beneficiamento mineral em construção" width="1070" height="1008">
+        <img id="img-energia" src="../assets/segmento-energia.jpg" alt="Vista aérea de uma usina solar em implantação, com fileiras de painéis e materiais no canteiro" width="1070" height="1008" loading="lazy">
+        <img id="img-barragens" src="../assets/segmento-barragens.jpg" alt="Vista aérea do talude de uma barragem ao lado do reservatório" width="1070" height="1008" loading="lazy">
+        <img id="img-infraestrutura" src="../assets/segmento-infraestrutura.jpg" alt="Guindaste e caminhões trabalhando sobre um aterro cercado por água" width="1070" height="1008" loading="lazy">
+        <img id="img-edificacoes" src="../assets/segmento-edificacoes.jpg" alt="Vista aérea de edifícios em construção com gruas" width="1070" height="1008" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(() => {
+  /* ---------- Sectors: hover/focus/tap switches item state and image ---------- */
+  const sectorBtns = [...document.querySelectorAll('.sector')];
+  function selectSector(btn) {
+    sectorBtns.forEach(b => {
+      const on = b === btn;
+      b.setAttribute('aria-selected', String(on));
+      document.getElementById(b.dataset.img).classList.toggle('is-active', on);
+    });
+  }
+  sectorBtns.forEach(b => {
+    b.addEventListener('mouseenter', () => selectSector(b));
+    b.addEventListener('focus', () => selectSector(b));
+    b.addEventListener('click', () => selectSector(b));
+  });
+})();
+</script>
+</body>
+</html>

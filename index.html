@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSX Interações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Spline+Sans+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  .hub { max-width: 960px; margin: 0 auto; padding: 80px 24px; }
+  .hub h1 { margin: 16px 0 8px; font: 500 clamp(32px, 4vw, 48px)/1.3 var(--font-2); }
+  .hub > p { margin: 0 0 48px; font: 400 18px/1.5 var(--font-2); color: var(--ink-2); }
+  .hub ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid #C6CED2; }
+  .hub li { border-bottom: 1px solid #C6CED2; }
+  .hub a { display: flex; flex-direction: column; gap: 4px; padding: 24px 0; color: var(--ink); text-decoration: none; }
+  .hub a:hover .hub__name { color: #005073; }
+  .hub__name { font: 500 24px/1.3 var(--font-2); transition: color .2s ease; }
+  .hub__desc { font: 400 16px/1.5 var(--font); color: var(--ink-2); }
+</style>
+</head>
+<body>
+<main class="hub">
+  <p class="eyebrow">
+    <svg viewBox="0 0 8 9" aria-hidden="true"><path fill="#AC8C58" d="M8 2.235 4 0 0 2.235v4.53L4 9l4-2.235z"/></svg>
+    TSX · Site institucional
+  </p>
+  <h1>Interações das sections</h1>
+  <p>Cada section roda sozinha, com o mesmo HTML, CSS e JS do protótipo.</p>
+  <ul>
+    <li><a href="quem-somos-nos/index.html"><span class="hub__name">Quem somos nós</span><span class="hub__desc">título revela palavra a palavra e os bignumbers se alinham conforme a section chega ao centro da tela</span></a></li>
+    <li><a href="solucoes-em-diferentes-frentes/index.html"><span class="hub__name">Soluções em diferentes frentes</span><span class="hub__desc">hover/foco/toque num segmento troca o estado do item e a imagem</span></a></li>
+    <li><a href="traduzindo-experiencia-em-resultados/index.html"><span class="hub__name">Traduzindo experiência em resultados</span><span class="hub__desc">carrossel infinito de projetos, começa no projeto do meio (setas, teclado e arraste)</span></a></li>
+    <li><a href="regioes-que-atuamos/index.html"><span class="hub__name">Regiões que atuamos</span><span class="hub__desc">estados acendem em sequência no mapa; hover/foco num estado assume o controle</span></a></li>
+  </ul>
+</main>
+</body>
+</html>

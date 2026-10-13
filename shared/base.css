@@ -1,0 +1,90 @@
+/* Base compartilhada pelas demos: tokens, reset, eyebrow e botão.
+   Extraída do protótipo TSX (index.html). */
+:root {
+  --bg: #EAEAEA;
+  --card: #E5DCCB;
+  --bar: #005981;
+  --ink: #2F2D28;
+  --ink-2: #595753;
+  --ink-muted: #BBB8B3;
+  --gold: #AC8C58;
+  --bg-2: #FCFBF8;
+  --line: #9F9E9C;
+  --navy: #0B1823;
+  --panel: #EAEAEA;
+  --rule: #BA965C;
+  --lead: rgba(230, 230, 229, .89);
+  --line-dark: #525A60;
+  --blue-dark: #003F5C;
+  --corner: #F9F6F1;
+  --font-2: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); }
+
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+}
+.eyebrow svg { flex: none; width: 8px; height: 9px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 16px 16px 20px;   /* 4px accent + 16px */
+  border-radius: 2px;
+  background: var(--bar);
+  box-shadow: inset 4px 0 0 #CEAE80;
+  color: #FFFFFF;
+  font: 400 16px/12px var(--font);
+  text-decoration: none;
+  transition: background-color .25s ease;
+}
+.btn svg { width: 13px; height: 13px; flex: none; transition: transform .25s ease; }
+.btn:hover { background: #00476A; }
+.btn:hover svg { transform: translateX(3px); }
+.btn:focus-visible { outline: 2px solid #CEAE80; outline-offset: 3px; }
+
+
+/* ---------- Smooth scroll (Lenis) ---------- */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+
+/* Moldura das demos (não faz parte do site) */
+.demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: var(--navy);
+  color: #FFFFFF;
+  font: 400 14px/1.5 var(--font);
+}
+.demo-bar a { color: #CEAE80; text-decoration: none; }
+.demo-bar a:hover { text-decoration: underline; }
+.demo-spacer {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 40px 20px;
+  background: var(--navy);
+  color: rgba(255, 255, 255, .6);
+  font: 400 16px/1.5 var(--font);
+  text-align: center;
+}

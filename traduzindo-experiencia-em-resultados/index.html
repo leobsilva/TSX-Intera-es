@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traduzindo experiência em resultados · TSX Interações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Spline+Sans+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+  /* ---------- Nossos projetos ---------- */
+  .projects {
+    --pad: 64px;
+    --peek: 79px;                   /* how much the next card shows past the first one */
+    container-type: inline-size;
+    background: var(--panel);
+    padding: 80px var(--pad);
+    overflow: hidden;
+  }
+  .projects__inner {
+    max-width: 1312px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+  .projects__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px 64px;
+  }
+  .projects__title {
+    margin: 0;
+    font-family: var(--font-2);
+    font-weight: 500;
+    font-size: clamp(32px, 3.34vw, 48px);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .projects__head .eyebrow { margin-bottom: 8px; }
+  .projects__intro {
+    max-width: 515px;
+    margin: 0;
+    font-family: var(--font-2);
+    font-weight: 400;
+    font-size: clamp(16px, 1.25vw, 18px);
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+
+  /* Track runs edge to edge: the active card sits in the middle with its neighbours
+     peeking out on both sides. JS clones the slides on each side to make it loop. */
+  .projects__track {
+    --gutter: calc((100cqw - 100%) / 2 + var(--pad));   /* cqw = section content box */
+    --gap: 24px;
+    position: relative;             /* offsetLeft of the cards is measured from here */
+    list-style: none;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0;
+    display: flex;
+    gap: var(--gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .projects__track::-webkit-scrollbar { display: none; }
+  .projects__track:focus-visible { outline: 2px solid var(--bar); outline-offset: 4px; }
+
+  .project {
+    position: relative;
+    flex: none;
+    width: min(1233px, calc(100cqw + 2 * var(--pad) - 2 * (var(--peek) + var(--gap))));   /* screen width minus a peek of each neighbour */
+    min-height: 429px;
+    display: grid;
+    grid-template-columns: minmax(0, 575fr) minmax(0, 658fr);
+    background: var(--navy);
+    color: #fff;
+    scroll-snap-align: center;
+    overflow: hidden;
+  }
+  .project::after {               /* decorative corner; 1px past the edges (clipped by the card) so no photo seam shows */
+    content: "";
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 94px;
+    height: 86px;
+    background: var(--panel);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+  .project__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    padding: 28px 64px 40px 56px;
+  }
+  .project__logo { display: block; width: 111px; height: 43px; }
+  .project__logo--brand {         /* partner logos from the brand strip, turned white for the navy card */
+    width: auto;
+    height: 43px;
+    max-width: 150px;
+    object-fit: contain;
+    object-position: left center;
+    filter: brightness(0) invert(1);
+  }
+  .project__info { width: min(322px, 100%); display: flex; flex-direction: column; gap: 12px; }
+  .project__name {
+    margin: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line-dark);
+    font-family: var(--font-2);
+    font-weight: 400;
+    font-size: clamp(24px, 1.95vw, 28px);
+    line-height: 1.35;
+  }
+  .project__stats {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px 64px;
+  }
+  .project__stats div { display: flex; flex-direction: column-reverse; }
+  .project__stats dt {
+    font-family: var(--font-2);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.35;
+    color: var(--lead);
+  }
+  .project__stats dd {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(28px, 2.22vw, 32px);
+    line-height: 1.35;
+  }
+  .project__media { position: relative; min-height: 100%; }
+  .project__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .projects__actions {
+    flex: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+  .projects__nav { display: flex; gap: 8px; }
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--blue-dark);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--blue-dark);
+    cursor: pointer;
+    transition: background-color .25s ease, color .25s ease, opacity .25s ease;
+  }
+  .icon-btn svg { width: 13px; height: 13px; }
+  .icon-btn:hover:not(:disabled) { background: var(--blue-dark); color: #fff; }
+  .icon-btn:disabled { opacity: .35; cursor: default; }
+  .icon-btn:focus-visible { outline: 2px solid var(--bar); outline-offset: 2px; }
+
+  @media (max-width: 1023px) {
+    .projects { --pad: 40px; --peek: 56px; padding-block: 64px; }
+    .projects__head > div { flex: none; }
+    .project { grid-template-columns: 1fr; min-height: 0; }
+    .project__media { order: -1; aspect-ratio: 16 / 9; }
+    .project__body { padding: 40px 40px 48px; }
+    .project__stats { justify-content: flex-start; }   /* keeps the labels clear of the corner */
+  }
+  @media (max-width: 599px) {
+    .projects { --pad: 20px; --peek: 36px; padding-block: 56px; }
+    .projects__inner { gap: 32px; }
+    .projects__head { flex-direction: column; align-items: flex-start; }
+    .project__media { aspect-ratio: 658 / 429; }
+    .projects__intro { flex: none; }
+    .projects__track { --gap: 16px; }
+    .project__body { padding: 28px 24px 56px; gap: 32px; }
+    .project__info { width: 100%; }
+    .project__stats { gap: 24px; }
+    .project::after { width: 48px; height: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .icon-btn { transition: none; }
+  }
+
+</style>
+</head>
+<body>
+<div class="demo-bar"><span>Traduzindo experiência em resultados — carrossel infinito de projetos, começa no projeto do meio (setas, teclado e arraste)</span><a href="../index.html">← Todas as interações</a></div>
+<section class="projects" aria-labelledby="projects-title" aria-roledescription="carrossel">
+  <div class="projects__inner">
+    <div class="projects__head">
+      <div>
+        <p class="eyebrow">
+          <svg viewBox="0 0 8 9" aria-hidden="true"><path fill="#AC8C58" d="M8 2.235 4 0 0 2.235v4.53L4 9l4-2.235z"/></svg>
+          Traduzindo experiência em resultados
+        </p>
+        <h2 class="projects__title" id="projects-title">Nossos projetos</h2>
+        <p class="projects__intro">Conheça alguns dos trabalhos que traduzem nossa experiência em resultados.</p>
+      </div>
+      <div class="projects__actions">
+        <div class="projects__nav">
+          <button type="button" class="icon-btn" id="projects-prev" aria-controls="projects-track" aria-label="Projeto anterior">
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M12.01 6.01H.71M6.36.35.71 6.01l5.65 5.66" stroke="currentColor"/></svg>
+          </button>
+          <button type="button" class="icon-btn" id="projects-next" aria-controls="projects-track" aria-label="Próximo projeto">
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+          </button>
+        </div>
+        <a class="btn" href="#projetos">
+          Veja todos os projetos
+          <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Only slide 1 is a real project (from the Figma). Slides 2–5 are placeholders: project names and
+         figures are invented and paired with brand-strip logos just to fill the layout. -->
+    <ul class="projects__track" id="projects-track" tabindex="0" aria-label="Projetos">
+      <li class="project" aria-roledescription="slide" aria-label="1 de 5">
+        <div class="project__body">
+          <img class="project__logo" src="../assets/mineracao-vale-verde.svg" alt="Mineração Vale Verde" width="111" height="43">
+          <div class="project__info">
+            <h3 class="project__name">Alteamento de Barragem Serrote Fase 2A</h3>
+            <dl class="project__stats">
+              <div><dt>Capex</dt><dd>71M</dd></div>
+              <div><dt>Período em meses</dt><dd>12</dd></div>
+            </dl>
+          </div>
+          <a class="btn" href="#projetos" aria-label="Saiba mais sobre Alteamento de Barragem Serrote Fase 2A">
+            Saiba mais
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+          </a>
+        </div>
+        <div class="project__media"><img src="../assets/projeto-serrote.jpg" alt="Vertedouro da barragem Serrote liberando água enquanto técnicos trabalham na estrutura" width="658" height="429" loading="lazy"></div>
+      </li>
+      <li class="project" aria-roledescription="slide" aria-label="2 de 5">
+        <div class="project__body">
+          <img class="project__logo project__logo--brand" src="../assets/sigma-lithium.svg" alt="Sigma Lithium" width="102" height="56">
+          <div class="project__info">
+            <h3 class="project__name">Planta de Beneficiamento de Lítio Fase 1</h3>
+            <dl class="project__stats">
+              <div><dt>Capex</dt><dd>240M</dd></div>
+              <div><dt>Período em meses</dt><dd>22</dd></div>
+            </dl>
+          </div>
+          <a class="btn" href="#projetos" aria-label="Saiba mais sobre Planta de Beneficiamento de Lítio Fase 1">
+            Saiba mais
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+          </a>
+        </div>
+        <div class="project__media"><img src="../assets/segmento-mineracao.jpg" alt="Vista aérea de uma planta de beneficiamento mineral em construção" width="658" height="429" loading="lazy"></div>
+      </li>
+      <li class="project" aria-roledescription="slide" aria-label="3 de 5">
+        <div class="project__body">
+          <img class="project__logo project__logo--brand" src="../assets/ero-copper.svg" alt="Ero Copper" width="102" height="30">
+          <div class="project__info">
+            <h3 class="project__name">Usina Fotovoltaica Sertão Solar I</h3>
+            <dl class="project__stats">
+              <div><dt>Capex</dt><dd>186M</dd></div>
+              <div><dt>Período em meses</dt><dd>18</dd></div>
+            </dl>
+          </div>
+          <a class="btn" href="#projetos" aria-label="Saiba mais sobre Usina Fotovoltaica Sertão Solar I">
+            Saiba mais
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+          </a>
+        </div>
+        <div class="project__media"><img src="../assets/segmento-energia.jpg" alt="Vista aérea de uma usina solar em implantação, com fileiras de painéis e materiais no canteiro" width="658" height="429" loading="lazy"></div>
+      </li>
+      <li class="project" aria-roledescription="slide" aria-label="4 de 5">
+        <div class="project__body">
+          <img class="project__logo project__logo--brand" src="../assets/bamin.svg" alt="Bamin" width="147" height="28">
+          <div class="project__info">
+            <h3 class="project__name">Aterro e Acesso Rodoviário Rio Pardo</h3>
+            <dl class="project__stats">
+              <div><dt>Capex</dt><dd>48M</dd></div>
+              <div><dt>Período em meses</dt><dd>10</dd></div>
+            </dl>
+          </div>
+          <a class="btn" href="#projetos" aria-label="Saiba mais sobre Aterro e Acesso Rodoviário Rio Pardo">
+            Saiba mais
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+          </a>
+        </div>
+        <div class="project__media"><img src="../assets/segmento-infraestrutura.jpg" alt="Guindaste e caminhões trabalhando sobre um aterro cercado por água" width="658" height="429" loading="lazy"></div>
+      </li>
+      <li class="project" aria-roledescription="slide" aria-label="5 de 5">
+        <div class="project__body">
+          <img class="project__logo project__logo--brand" src="../assets/vale.svg" alt="Vale" width="102" height="39">
+          <div class="project__info">
+            <h3 class="project__name">Hospital Bela Vista – Torre B</h3>
+            <dl class="project__stats">
+              <div><dt>Capex</dt><dd>95M</dd></div>
+              <div><dt>Período em meses</dt><dd>20</dd></div>
+            </dl>
+          </div>
+          <a class="btn" href="#projetos" aria-label="Saiba mais sobre Hospital Bela Vista – Torre B">
+            Saiba mais
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M0 6.01h11.3M5.65.35l5.65 5.66-5.65 5.66" stroke="currentColor"/></svg>
+          </a>
+        </div>
+        <div class="project__media"><img src="../assets/segmento-edificacoes.jpg" alt="Vista aérea de edifícios em construção com gruas" width="658" height="429" loading="lazy"></div>
+      </li>
+    </ul>
+  </div>
+</section>
+<script>
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- Projects: endless carousel, starts on the middle project ----------
+     The real slides sit between two inert copies. Whenever the scroll settles on a copy,
+     the track jumps (without animation) to the same card in the real set. */
+  const projTrack = document.getElementById('projects-track');
+  const projPrev = document.getElementById('projects-prev');
+  const projNext = document.getElementById('projects-next');
+  const projReal = [...projTrack.children];
+  const projCount = projReal.length;
+  const projClone = () => projReal.map(li => {
+    const c = li.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    c.inert = true;
+    c.querySelectorAll('img').forEach(i => i.removeAttribute('loading'));
+    return c;
+  });
+  projTrack.prepend(...projClone());
+  projTrack.append(...projClone());
+  const projCards = [...projTrack.children];
+
+  let projAt = projCount + Math.floor(projCount / 2);   // middle project of the real set
+  const projOffset = card => card.offsetLeft - (projTrack.clientWidth - card.offsetWidth) / 2;
+  function projCurrent() {
+    const mid = projTrack.scrollLeft + projTrack.clientWidth / 2;
+    let best = 0, dist = Infinity;
+    projCards.forEach((c, i) => {
+      const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+      if (d < dist) { dist = d; best = i; }
+    });
+    return best;
+  }
+  function projGo(i, smooth) {
+    projTrack.scrollTo({ left: projOffset(projCards[i]), behavior: smooth && !reduce.matches ? 'smooth' : 'auto' });
+  }
+  function projWrap() {                           // copy → same card in the real set
+    const i = projCurrent();
+    if (i < projCount) projGo(i + projCount, false);
+    else if (i >= 2 * projCount) projGo(i - projCount, false);
+    return projAt = projCurrent();
+  }
+  const moveProj = dir => projGo(projWrap() + dir, true);
+
+  projPrev.addEventListener('click', () => moveProj(-1));
+  projNext.addEventListener('click', () => moveProj(1));
+  projTrack.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); moveProj(e.key === 'ArrowLeft' ? -1 : 1); }
+  });
+  let projIdle;
+  projTrack.addEventListener('scroll', () => {   // 'scrollend' isn't everywhere yet, so debounce
+    clearTimeout(projIdle);
+    projIdle = setTimeout(projWrap, 140);
+  }, { passive: true });
+  window.addEventListener('resize', () => projGo(projAt, false));
+  projGo(projAt, false);
+})();
+</script>
+</body>
+</html>
